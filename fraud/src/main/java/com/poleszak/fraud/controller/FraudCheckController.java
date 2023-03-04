@@ -16,13 +16,15 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/fraud-check")
-public record FraudCheckController(FraudCheckService fraudCheckService) {
+public class FraudCheckController {
+
+    private final FraudCheckService fraudCheckService;
 
     @GetMapping(path = "{customerId}")
     public ResponseEntity<FraudCheckResponse> isFraudster(@PathVariable("customerId") Integer customerId) {
         log.info("Customer fraud check for customer with id: {}", customerId);
         FraudCheckResponse fraudCheckResponse = fraudCheckService.isFraudulentCustomer(customerId);
-        log.info("Customer {} fraud check response is: {}", customerId, fraudCheckResponse);
+        log.info("Customer with id {} fraud check response is: {}", customerId, fraudCheckResponse);
 
         return ResponseEntity.status(CREATED).body(fraudCheckResponse);
     }
