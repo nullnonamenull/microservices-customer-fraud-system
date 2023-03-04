@@ -1,4 +1,4 @@
-package com.poleszak.entity;
+package com.poleszak.customer.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Builder
@@ -19,7 +19,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY, generator = "customer_id_sequence")
+    @GeneratedValue(strategy = SEQUENCE, generator = "customer_id_sequence")
     @SequenceGenerator(name = "customer_id_sequence", sequenceName = "customer_id_sequence")
     private Integer id;
     private String firstname;
