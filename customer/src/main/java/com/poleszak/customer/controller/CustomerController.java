@@ -16,7 +16,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequestMapping("api/v1/customer")
 @RequiredArgsConstructor
-public record CustomerController(CustomerService customerService) {
+public class CustomerController {
+
+    private final CustomerService customerService;
 
     @PostMapping
     public ResponseEntity<CustomerRegistrationDto> add(@RequestBody CustomerRegistrationDto customerRegistrationDto) {
