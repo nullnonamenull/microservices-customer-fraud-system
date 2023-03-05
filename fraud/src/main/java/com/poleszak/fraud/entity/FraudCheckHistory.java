@@ -1,17 +1,18 @@
 package com.poleszak.fraud.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.SEQUENCE;
+
 
 @Data
 @AllArgsConstructor
