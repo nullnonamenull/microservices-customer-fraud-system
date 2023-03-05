@@ -1,6 +1,6 @@
 package com.poleszak.fraud.controller;
 
-import com.poleszak.fraud.entity.dto.FraudCheckResponse;
+import com.poleszak.clients.fraud.FraudCheckResponse;
 import com.poleszak.fraud.service.FraudCheckService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,19 +1,24 @@
 package com.poleszak.customer.service;
 
+import com.poleszak.clients.fraud.FraudCheckResponse;
+import com.poleszak.clients.fraud.FraudClient;
+import com.poleszak.clients.notification.NotificationClient;
+import com.poleszak.clients.notification.NotificationRequest;
 import com.poleszak.customer.entity.Customer;
 import com.poleszak.customer.entity.dto.CustomerRegistrationDto;
 import com.poleszak.customer.repository.CustomerRepository;
-import com.poleszak.customer.response.FraudCheckResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
+import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
+    private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
 
     public void addNewCustomer(CustomerRegistrationDto customerRegistrationDto) {
         Customer customer = Customer.builder()
@@ -23,20 +28,22 @@ public class CustomerService {
                 .build();
 
         customerRepository.saveAndFlush(customer);
-        checkFraudster(customer);
+        checkIsCustomerFraudster(customer);
+        sendNotification(customer);
     }
 
-    private void checkFraudster(Customer customer) {
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://FRAUD/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class,
-                customer.getId()
+    private void sendNotification(Customer customer) {
+        String message = format("Hi %s, welcome to Application.", customer.getFirstname());
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                message
         );
+        notificationClient.sendNotification(notificationRequest);
+    }
 
-        if (fraudCheckResponse == null) {
-            throw new NullPointerException("No response from fraud service for customer with id: " + customer.getId());
-        }
-
+    private void checkIsCustomerFraudster(Customer customer) {
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
         if (fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("Fraudster");
         }
