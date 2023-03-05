@@ -1,7 +1,7 @@
 package com.poleszak.fraud.service;
 
+import com.poleszak.clients.fraud.FraudCheckResponse;
 import com.poleszak.fraud.entity.FraudCheckHistory;
-import com.poleszak.fraud.entity.dto.FraudCheckResponse;
 import com.poleszak.fraud.repository.FraudCheckHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

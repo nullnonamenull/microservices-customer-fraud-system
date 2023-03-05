@@ -1,4 +1,4 @@
-package com.poleszak.fraud.entity.dto;
+package com.poleszak.clients.fraud;
 
 public record FraudCheckResponse(Boolean isFraudster) {
 }
