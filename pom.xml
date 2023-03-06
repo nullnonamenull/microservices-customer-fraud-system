@@ -25,9 +25,9 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <spring.boot.dependencies.version>3.0.2</spring.boot.dependencies.version>
-        <spring.boot.maven.plugin.version>3.0.2</spring.boot.maven.plugin.version>
-        <spring-cloud-dependencies-version>2022.0.1</spring-cloud-dependencies-version>
+        <spring.boot.dependencies.version>2.5.1</spring.boot.dependencies.version>
+        <spring.boot.maven.plugin.version>2.5.1</spring.boot.maven.plugin.version>
+        <spring-cloud-dependencies-version>2020.0.3</spring-cloud-dependencies-version>
     </properties>
 
     <dependencyManagement>
@@ -61,6 +61,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
     </dependencies>
 
