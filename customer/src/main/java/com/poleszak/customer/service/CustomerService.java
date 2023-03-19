@@ -2,11 +2,11 @@ package com.poleszak.customer.service;
 
 import com.poleszak.clients.fraud.FraudCheckResponse;
 import com.poleszak.clients.fraud.FraudClient;
-import com.poleszak.clients.notification.NotificationClient;
 import com.poleszak.clients.notification.NotificationRequest;
 import com.poleszak.customer.entity.Customer;
 import com.poleszak.customer.entity.dto.CustomerRegistrationDto;
 import com.poleszak.customer.repository.CustomerRepository;
+import com.poleszak.rabbitmq.RabbitMQMessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final FraudClient fraudClient;
-    private final NotificationClient notificationClient;
+    private final RabbitMQMessageProducer messageProducer;
 
     public void addNewCustomer(CustomerRegistrationDto customerRegistrationDto) {
         Customer customer = Customer.builder()
@@ -39,7 +39,10 @@ public class CustomerService {
                 customer.getEmail(),
                 message
         );
-        notificationClient.sendNotification(notificationRequest);
+        messageProducer.publish(
+                notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key");
     }
 
     private void checkIsCustomerFraudster(Customer customer) {
