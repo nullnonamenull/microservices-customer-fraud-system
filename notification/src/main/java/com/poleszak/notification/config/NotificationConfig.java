@@ -23,19 +23,20 @@ public class NotificationConfig {
     private String internalNotificationRoutingKey;
 
     @Bean
+    public TopicExchange internalTopicExchange() {
+        return new TopicExchange(this.internalExchange);
+    }
+
+    @Bean
     public Queue notificationQueue() {
         return new Queue(this.notificationQueue);
     }
 
     @Bean
     public Binding internalToNotificationBinding() {
-        return BindingBuilder.bind(notificationQueue())
+        return BindingBuilder
+                .bind(notificationQueue())
                 .to(internalTopicExchange())
                 .with(this.internalNotificationRoutingKey);
-    }
-
-    @Bean
-    public TopicExchange internalTopicExchange() {
-        return new TopicExchange(this.internalExchange);
     }
 }

@@ -18,23 +18,25 @@ public class RabbitMQConfig {
 
     @Bean
     public AmqpTemplate amqpTemplate() {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate();
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jacksonConverter());
-
         return rabbitTemplate;
     }
 
     @Bean
     public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory() {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        SimpleRabbitListenerContainerFactory factory =
+                new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(jacksonConverter());
-
         return factory;
     }
 
     @Bean
     public MessageConverter jacksonConverter() {
-        return new Jackson2JsonMessageConverter();
+        MessageConverter jackson2JsonMessageConverter =
+                new Jackson2JsonMessageConverter();
+        return jackson2JsonMessageConverter;
     }
 }
+
