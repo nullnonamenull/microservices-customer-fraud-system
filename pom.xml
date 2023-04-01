@@ -31,6 +31,8 @@
         <spring.boot.maven.plugin.version>2.5.1</spring.boot.maven.plugin.version>
         <spring-cloud-dependencies-version>2020.0.3</spring-cloud-dependencies-version>
         <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
+        <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
+        <image>poleszak/${project.artifactId}:${project.version}</image>
     </properties>
 
     <dependencyManagement>
@@ -85,6 +87,23 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib-maven-plugin.version}</version>
+                    <configuration>
+                        <from>
+                            <image>eclipse-temurin:17@sha256:2b47a8ea946ce1e5365a1562414ed576e378b7b670cadff3fb98ebecf2890cdc</image>
+                            <architecture>amd64</architecture>
+                            <os>linux</os>
+                        </from>
+                        <to>
+                            <tags>
+                                <tag>latest</tag>
+                            </tags>
+                        </to>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
