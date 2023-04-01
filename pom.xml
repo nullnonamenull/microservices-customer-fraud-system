@@ -95,8 +95,6 @@
                     <configuration>
                         <from>
                             <image>eclipse-temurin:17</image>
-                            <architecture>amd64</architecture>
-                            <os>linux</os>
                         </from>
                         <to>
                             <tags>
@@ -108,7 +106,7 @@
                         <execution>
                             <phase>package</phase>
                             <goals>
-                                <goal>dockerBuild</goal>
+                                <goal>build</goal>
                             </goals>
                         </execution>
                     </executions>
