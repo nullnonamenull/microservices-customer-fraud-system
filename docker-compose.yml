@@ -39,6 +39,48 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  server-eureka:
+    image: poleszak/server-eureka:latest
+    container_name: server-eureka
+    ports:
+      - "8761:8761"
+    depends_on:
+      - zipkin
+  api-gateway:
+    image: poleszak/api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8083:8083"
+    depends_on:
+      - zipkin
+      - server-eureka
+  customer:
+    image: poleszak/customer:latest
+    container_name: customer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zipkin
+      - server-eureka
+      - fraud
+      - notification
+      - api-gateway
+  notification:
+    image: poleszak/notification:latest
+    container_name: notification
+    ports:
+      - "8082:8082"
+    depends_on:
+      - zipkin
+      - server-eureka
+  fraud:
+    image: poleszak/fraud:latest
+    container_name: fraud
+    ports:
+      - "8081:8081"
+    depends_on:
+      - zipkin
+      - server-eureka
 
 networks:
   postgres:
