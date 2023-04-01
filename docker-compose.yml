@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   postgres:
     container_name: postgres
@@ -28,6 +30,7 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
@@ -35,58 +38,94 @@ services:
       - "9411:9411"
     networks:
       - spring
+
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
     container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - spring
+
   server-eureka:
     image: poleszak/server-eureka:latest
     container_name: server-eureka
     ports:
       - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
       - zipkin
+      - rabbitmq
+      - postgres
     networks:
       - spring
+
   api-gateway:
     image: poleszak/api-gateway:latest
     container_name: api-gateway
     ports:
       - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
       - zipkin
       - server-eureka
+      - postgres
+      - rabbitmq
     networks:
       - spring
+
   customer:
     image: poleszak/customer:latest
     container_name: customer
     ports:
       - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - postgres
+      - spring
     depends_on:
       - zipkin
       - server-eureka
       - fraud
       - notification
       - api-gateway
+      - postgres
+      - rabbitmq
+
   notification:
     image: poleszak/notification:latest
     container_name: notification
     ports:
       - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - postgres
+      - spring
     depends_on:
       - zipkin
       - server-eureka
+      - postgres
+      - fraud
+
   fraud:
     image: poleszak/fraud:latest
     container_name: fraud
     ports:
       - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - postgres
+      - spring
     depends_on:
       - zipkin
       - server-eureka
+      - postgres
 
 networks:
   postgres:
