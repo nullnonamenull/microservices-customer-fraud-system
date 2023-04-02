@@ -7,9 +7,6 @@ metadata:
 spec:
   serviceName: postgres
   replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
   template:
     metadata:
       name: postgres
@@ -25,8 +22,11 @@ spec:
           image: postgres
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: "/var/lib/postgresql/data"
               name: postgres
+          envFrom:
+            - configMapRef:
+                name: postgres-config
           resources:
             requests:
               cpu: 100m
@@ -35,3 +35,6 @@ spec:
               cpu: 500m
               memory: 512Mi
       restartPolicy: Always
+  selector:
+    matchLabels:
+      app: postgres
