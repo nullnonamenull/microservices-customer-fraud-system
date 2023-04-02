@@ -91,7 +91,6 @@ services:
       - zipkin
       - fraud
       - notification
-      - api-gateway
       - postgres
       - rabbitmq
 
