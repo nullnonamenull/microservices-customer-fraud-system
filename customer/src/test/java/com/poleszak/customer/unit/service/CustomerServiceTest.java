@@ -1,6 +1,7 @@
 package com.poleszak.customer.unit.service;
 
 import com.poleszak.clients.fraud.FraudClient;
+import com.poleszak.customer.entity.dto.CustomerRegistrationDto;
 import com.poleszak.customer.repository.CustomerRepository;
 import com.poleszak.customer.service.CustomerService;
 import com.poleszak.rabbitmq.RabbitMQMessageProducer;
@@ -27,7 +28,10 @@ class CustomerServiceTest {
     @Test
     void addNewCustomer() {
         //given
+        CustomerRegistrationDto customerRegistrationDto = new CustomerRegistrationDto("Flan", "Dzban", "flan@flan.com");
+
         //when
+        customerService.addNewCustomer(customerRegistrationDto);
         //then
     }
 }
