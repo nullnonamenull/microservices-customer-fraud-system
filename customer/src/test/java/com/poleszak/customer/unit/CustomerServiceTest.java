@@ -1,4 +1,4 @@
-package com.poleszak.customer.unit.service;
+package com.poleszak.customer.unit;
 
 import com.poleszak.clients.fraud.FraudClient;
 import com.poleszak.customer.entity.dto.CustomerRegistrationDto;
