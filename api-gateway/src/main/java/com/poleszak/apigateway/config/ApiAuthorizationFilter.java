@@ -1,5 +1,6 @@
 package com.poleszak.apigateway.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.Route;
@@ -13,17 +14,18 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Component
+@RequiredArgsConstructor
 public class ApiAuthorizationFilter implements GlobalFilter, Ordered {
+
+    private final FakeApiAuthorizationChecker fakeApiAuthorizationChecker;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         Route route = exchange.getAttribute(GATEWAY_ROUTE_ATTR);
-        if (route == null) {
-            throw new ResponseStatusException(UNAUTHORIZED);
-        }
         var application = route.getId();
         var apiKey = exchange.getRequest().getHeaders().get("ApiKey");
 
-        if (apiKey == null || apiKey.isEmpty()) {
+        if (application == null || (apiKey == null || apiKey.isEmpty()) || !fakeApiAuthorizationChecker.isAuthorized(apiKey.get(0), application)) {
             throw new ResponseStatusException(UNAUTHORIZED);
         }
         return chain.filter(exchange);
